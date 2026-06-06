@@ -1,0 +1,18 @@
+# Quartus / Intel FPGA generated directories
+/db/
+incremental_db/
+output_files/
+simulation/
+
+# Quartus temporary and generated files
+*.qws
+*.qdb
+*.qws~
+*.qpf~
+*.qsf~
+*.qar
+*.rpt
+*.log
+*.jou
+*.summary
+*.qws
