@@ -10,22 +10,22 @@ module ToSeg(D, seg);
 
     always @(*) begin
         case(D)
-            4'd0:  seg = 7'b1100000;
-            4'd1:  seg = 7'b1111001;
-            4'd2:  seg = 7'b1010010;
-            4'd3:  seg = 7'b1011000;
-            4'd4:  seg = 7'b1001100;
-            4'd5:  seg = 7'b1001001;
-            4'd6:  seg = 7'b1000001;
-            4'd7:  seg = 7'b1111000;
-            4'd8:  seg = 7'b1000000;
-            4'd9:  seg = 7'b1001000;
-            4'd10: seg = 7'b1000100;
-            4'd11: seg = 7'b1000011;
-            4'd12: seg = 7'b1100011;
-            4'd13: seg = 7'b1010001;
-            4'd14: seg = 7'b1000110; 
-            4'd15: seg = 7'b1000111;
+            4'd0:  seg = 7'b0011111;
+            4'd1:  seg = 7'b0000110;
+            4'd2:  seg = 7'b0101101;
+            4'd3:  seg = 7'b0100111;
+            4'd4:  seg = 7'b0110011;
+            4'd5:  seg = 7'b0110110;
+            4'd6:  seg = 7'b0111110;
+            4'd7:  seg = 7'b0000111;
+            4'd8:  seg = 7'b0111111;
+            4'd9:  seg = 7'b0110111;
+            4'd10: seg = 7'b0111011;
+            4'd11: seg = 7'b0111100;
+            4'd12: seg = 7'b0011100;
+            4'd13: seg = 7'b0101110;
+            4'd14: seg = 7'b0111001;
+            4'd15: seg = 7'b0111000;
         endcase
     end
 endmodule
@@ -50,13 +50,13 @@ module display(rst, clk1k, D0, D1, D2, D3, D4, D5, sel, seg);
     
     always @(*) begin
         case (cnt)
-            3'd0: sel = 6'b111110;
-            3'd1: sel = 6'b111101;
-            3'd2: sel = 6'b111011;
-            3'd3: sel = 6'b110111;
-            3'd4: sel = 6'b101111;
-            3'd5: sel = 6'b011111;  
-            default: sel = 6'b111111;
+            3'd5: sel = 6'b100000;
+            3'd4: sel = 6'b010000;
+            3'd3: sel = 6'b001000;
+            3'd2: sel = 6'b000100;
+            3'd1: sel = 6'b000010;
+            3'd0: sel = 6'b000001;  
+            default: sel = 6'b000000;
         endcase
     end
 
