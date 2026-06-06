@@ -73,7 +73,7 @@ output reg [2:0] state;
                 state<=0;
             end
             else if(modePulse) begin
-                state<=(state==3)? 0: state+1;
+                state<=(state==5)? 0: state+1;
             end
             else if ((state==1 || state==2 || state==4 || state==5) && idleCnt >= 2000) begin
                 state<=0;

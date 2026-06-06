@@ -28,7 +28,7 @@ wire [3:0] sa1, sa2, ma1, ma2, ha1, ha2;
 wire [5:0] sel1, sel2, sel3;
 wire [7:0] seg1, seg2, seg3;
 wire MinAdd, HourAdd, MinSub, HourSub;
-wire [1:0] state;
+wire [2:0] state;
 
 div Div(clk, rst, clk1k, clk100, clk1);
 
@@ -55,8 +55,8 @@ DivNum DivNum9(ha, ha1, ha2);
 display Display1(rst, clk1k, state, s2, s1, m2, m1, h2, h1, sel1, seg1);
 display Display2(rst, clk1k, state, ms2, ms1, ss2, ss1, mm2, mm1, sel2, seg2);
 display Display3(rst, clk1k, state, sa2, sa1, ma2, ma1, ha2, ha1, sel3, seg3);
-assign sel = (state==3)? sel2 : (state==0)? sel1 : sel3;
-assign seg = (state==3)? seg2 : (state==0)? seg1 : seg3;
+assign sel = (state==3)? sel2 : (state==4 || state==5)? sel3 : sel1;
+assign seg = (state==3)? seg2 : (state==4 || state==5)? seg3 : seg1;
 
 always @(*) begin    
     case (state)
