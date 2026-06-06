@@ -64,8 +64,8 @@ DivNum DivNum4(ms, ms1, ms2);
 DivNum DivNum5(ss, ss1, ss2);
 DivNum DivNum6(mm, mm1, mm2);
 
-display Display1(rst, clk1k, s2, s1, m2, m1, h2, h1, sel1, seg1);
-display Display2(rst, clk1k, ms2, ms1, ss2, ss1, mm2, mm1, sel2, seg2);
+display Display1(rst, clk1k, state, s2, s1, m2, m1, h2, h1, sel1, seg1);
+display Display2(rst, clk1k, state, ms2, ms1, ss2, ss1, mm2, mm1, sel2, seg2);
 assign sel = (state!=3)? sel1 : sel2;
 assign seg = (state!=3)? seg1 : seg2;
 

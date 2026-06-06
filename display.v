@@ -32,9 +32,10 @@ output reg [7:0] seg;
     end
 endmodule
 
-module display(rst, clk1k, D0, D1, D2, D3, D4, D5, sel, seg);
+module display(rst, clk1k, state, D0, D1, D2, D3, D4, D5, sel, seg);
     input rst, clk1k;
     input [3:0] D0, D1, D2, D3, D4, D5;
+    input [1:0] state;
     output [5:0] sel;
     output [7:0] seg;
     reg [5:0] active;
@@ -75,9 +76,13 @@ module display(rst, clk1k, D0, D1, D2, D3, D4, D5, sel, seg);
 
     assign sel = ~active;
 
-    ToSeg u_ToSeg(.D(Dsel), .seg(SegWire));
+    ToSeg TS(.D(Dsel), .seg(SegWire));
 
-    // 闪烁分钟个位的dp和时钟个位的dp
-    assign seg = (active==6'b001000 || active==6'b000010)? {dp, SegWire[6:0]}: SegWire;
+    // S=1, S=2时，分钟、时钟闪烁
+    wire blink = (state==1 && (active==6'b001000 || active==6'b000100)) ||
+                 (state==2 && (active==6'b000010 || active==6'b000001));
+    assign seg = blink? 
+                 (dp ? 8'b11111111 : SegWire):
+                 ((active==6'b001000 || active==6'b000010)? {dp, SegWire[6:0]}:SegWire);
 
 endmodule
