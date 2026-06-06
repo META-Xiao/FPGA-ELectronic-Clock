@@ -25,14 +25,14 @@ wire [5:0] ss, mm;
 wire [3:0] ms1, ms2, ss1, ss2, mm1, mm2;
 wire [5:0] sel1, sel2;
 wire [7:0] seg1, seg2;
-wire MinAdd, HourAdd;
+wire MinAdd, HourAdd, MinSub, HourSub;
 wire [1:0] state;
 
 div Div(clk, rst, clk1k, clk100, clk1);
 
-ModeSel ModeSel1(clk100, rst, mode, key1, MinAdd, HourAdd, state);
+ModeSel ModeSel1(clk100, rst, mode, key1, key2, MinAdd, HourAdd, MinSub, HourSub, state);
 
-MainClock MC(clk100, rst, MinAdd, HourAdd, state, s, m, h);
+MainClock MC(clk100, rst, MinAdd, HourAdd, MinSub, HourSub, state, s, m, h);
 
 Stopwatch Spt(clk100, rst, key1, key2, ms, ss, mm);
 
@@ -66,8 +66,8 @@ DivNum DivNum6(mm, mm1, mm2);
 
 display Display1(rst, clk1k, s2, s1, m2, m1, h2, h1, sel1, seg1);
 display Display2(rst, clk1k, ms2, ms1, ss2, ss1, mm2, mm1, sel2, seg2);
-assign sel = (state!=2'd3)? sel1 : sel2;
-assign seg = (state!=2'd3)? seg1 : seg2;
+assign sel = (state!=3)? sel1 : sel2;
+assign seg = (state!=3)? seg1 : seg2;
 
 always @(*) begin    
     case (state)

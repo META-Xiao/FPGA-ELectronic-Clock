@@ -12,21 +12,23 @@ ModeSel.v by ZelongXiao
 2026.06.06
 */
 
-module ModeSel(clk100, rst, mode, add, MinAdd, HourAdd, state);
-input clk100, rst, mode, add;
-output reg MinAdd, HourAdd;
+module ModeSel(clk100, rst, mode, add, Sub, MinAdd, HourAdd, MinSub, HourSub, state);
+input clk100, rst, mode, add, Sub;
+output reg MinAdd, HourAdd, MinSub, HourSub;
 output reg [1:0] state;
 
-    reg modeLa, addLa;
+    reg modeLa, addLa, SubLa;
     reg [15:0] modeHoldCnt;
     reg [15:0] idleCnt;
     
     wire modeIn=~mode;
     wire addIn=~add;
+    wire SubIn=~Sub;
 
     wire modePulse = modeIn & ~modeLa;
     wire addPulse  = addIn  & ~addLa;
-    wire modeLong  = (modeHoldCnt >= 16'd200);
+    wire SubPulse = SubIn & ~SubLa;
+    wire modeLong  = (modeHoldCnt >= 200);
 
     // 边沿检测
     always @(posedge clk100 or negedge rst) begin
@@ -37,43 +39,42 @@ output reg [1:0] state;
         else begin
             modeLa<=modeIn;
             addLa <=addIn;
+            SubLa <=SubIn;
         end
     end
 
     // 长按检测
     always @(posedge clk100 or negedge rst) begin
         if (!rst)
-            modeHoldCnt<=16'd0;
-        else if (!modeIn || state==2'd0)
-            modeHoldCnt <= 16'd0;
-        else if (modeHoldCnt < 16'd65535)
-            modeHoldCnt <= modeHoldCnt + 16'd1;
+            modeHoldCnt<=0;
+        else if (!modeIn || state==0)
+            modeHoldCnt<=0;
+        else if (modeHoldCnt<16'd65535)
+            modeHoldCnt<=modeHoldCnt+1;
     end
 
     // 状态机
     always @(posedge clk100 or negedge rst) begin
         if (!rst) begin
-            state  <=2'd0;
-            idleCnt <= 16'd0;
+            state<=0;
+            idleCnt<=0;
         end
         else begin
-            if (modePulse || addPulse)
-                idleCnt <= 16'd0;
-            else if (state == 2'd1 || state == 2'd2) begin
-                if (idleCnt < 16'd2000)
-                    idleCnt <= idleCnt + 16'd1;
+            if (modePulse || addPulse || SubPulse)
+                idleCnt<=0;
+            else if (state==1 || state==2) begin
+                if(idleCnt<2000) idleCnt<=idleCnt+1;
             end
-            else
-                idleCnt <= 16'd0;
+            else idleCnt<=0;
 
-            if (modeLong) begin
-                state <= 2'd0;
+            if(modeLong) begin
+                state<=0;
             end
-            else if (modePulse) begin
-                state<=(state==2'd3)? 2'd0: state+1;
+            else if(modePulse) begin
+                state<=(state==3)? 0: state+1;
             end
-            else if ((state == 2'd1 || state == 2'd2) && idleCnt >= 16'd2000) begin
-                state <= 2'd0;
+            else if ((state==1 || state==2) && idleCnt >= 2000) begin
+                state<=0;
             end
         end
     end
@@ -81,17 +82,28 @@ output reg [1:0] state;
     // 输出
     always @(posedge clk100 or negedge rst) begin
         if (!rst) begin
-            MinAdd  <= 1'b0;
-            HourAdd <= 1'b0;
+            MinAdd<=0;
+            HourAdd<=0;
+            MinSub<=0;
+            HourSub<=0;
         end
         else begin
-            MinAdd  <= 1'b0;
-            HourAdd <= 1'b0;
+            MinAdd<=0;
+            HourAdd<=0;
+            MinSub<=0;
+            HourSub<=0;
 
             if (addPulse) begin
                 case (state)
-                    2'd1: MinAdd<=1;
-                    2'd2: HourAdd<=1;
+                    1: MinAdd<=1;
+                    2: HourAdd<=1;
+                    default: ;
+                endcase
+            end
+            else if (SubPulse) begin
+                case (state)
+                    1: MinSub<=1;
+                    2: HourSub<=1;
                     default: ;
                 endcase
             end
