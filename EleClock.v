@@ -5,7 +5,7 @@ EleClock by ZelongXiao
 */
 
 module DivNum(in, out1, out2);
-input [5:0] in;
+input [6:0] in;
 output [3:0] out1, out2;
     assign out1=in/10;
     assign out2=in%10;
@@ -19,8 +19,9 @@ output reg [3:0] LED;
 wire clk1k, clk100, clk1;
 wire [5:0] s, m, h;
 wire [3:0] s1, s2, m1, m2, h1, h2;
-wire [5:0] ss, mm, hh;
-wire [3:0] ss1, ss2, mm1, mm2, hh1, hh2;
+wire [6:0] ms;
+wire [5:0] ss, mm;
+wire [3:0] ms1, ms2, ss1, ss2, mm1, mm2;
 wire [5:0] sel1, sel2;
 wire [7:0] seg1, seg2;
 wire MinAdd, HourAdd;
@@ -32,7 +33,7 @@ ModeSel ModeSel1(clk100, rst, mode, key1, MinAdd, HourAdd, state);
 
 Settings Settings1(clk100, rst, MinAdd, HourAdd, state, s, m, h);
 
-Stopwatch Spt(clk100, rst, key1, key2, ss, mm, hh);
+Stopwatch Spt(clk100, rst, key1, key2, ms, ss, mm);
 
 // always @(posedge clk1 or negedge rst) begin
 //     if (!rst) begin 
@@ -57,12 +58,12 @@ Stopwatch Spt(clk100, rst, key1, key2, ss, mm, hh);
 DivNum DivNum1(s, s1, s2);
 DivNum DivNum2(m, m1, m2);
 DivNum DivNum3(h, h1, h2);
-DivNum DivNum4(ss, ss1, ss2);
-DivNum DivNum5(mm, mm1, mm2);
-DivNum DivNum6(hh, hh1, hh2);
+DivNum DivNum4(ms, ms1, ms2);
+DivNum DivNum5(ss, ss1, ss2);
+DivNum DivNum6(mm, mm1, mm2);
 
 display Display1(rst, clk1k, s2, s1, m2, m1, h2, h1, sel1, seg1);
-display Display2(rst, clk1k, ss2, ss1, mm2, mm1, hh2, hh1, sel2, seg2);
+display Display2(rst, clk1k, ms2, ms1, ss2, ss1, mm2, mm1, sel2, seg2);
 assign sel = (state!=2'd3)? sel1 : sel2;
 assign seg = (state!=2'd3)? seg1 : seg2;
 
