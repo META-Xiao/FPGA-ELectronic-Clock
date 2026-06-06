@@ -45,7 +45,7 @@ DivNum DivNum1(s, sec1, sec2);
 DivNum DivNum2(m, min1, min2);
 DivNum DivNum3(h, hour1, hour2);
 
-display Display(rst, clk1k, sec1, sec2, min1, min2, hour1, hour2, sel, seg);
+display Display(rst, clk1k, sec2, sec1, min2, min1, hour2, hour1, sel, seg);
 
 
 endmodule
