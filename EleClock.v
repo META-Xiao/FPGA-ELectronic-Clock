@@ -11,11 +11,12 @@ output [3:0] out1, out2;
     assign out2=in%10;
 endmodule 
 
-module EleClock(clk, rst, mode, key1, key2, sel, seg, LED);
+module EleClock(clk, rst, mode, key1, key2, sel, seg, LED, buzzer);
 input clk, rst, mode, key1, key2;
 output [5:0] sel;
 output [7:0] seg;
 output reg [3:0] LED;
+output buzzer;
 wire clk1k, clk100, clk1;
 wire [5:0] s, m, h;
 wire [3:0] s1, s2, m1, m2, h1, h2;
@@ -31,10 +32,11 @@ div Div(clk, rst, clk1k, clk100, clk1);
 
 ModeSel ModeSel1(clk100, rst, mode, key1, MinAdd, HourAdd, state);
 
-Settings Settings1(clk100, rst, MinAdd, HourAdd, state, s, m, h);
+MainClock MC(clk100, rst, MinAdd, HourAdd, state, s, m, h);
 
 Stopwatch Spt(clk100, rst, key1, key2, ms, ss, mm);
 
+Buzzer Bz(clk1k, rst, s, m, buzzer);
 // always @(posedge clk1 or negedge rst) begin
 //     if (!rst) begin 
 //         s<=6'b0;

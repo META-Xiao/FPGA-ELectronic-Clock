@@ -51,7 +51,7 @@ output reg [5:0] s, m;
                     ms<=0;
                     if(s==59) begin
                         s<=0;
-                        if(m==59) m <= 0;
+                        if(m==59) m<=0;
                         else m<=m+1;
                     end
                     else s<=s+1;

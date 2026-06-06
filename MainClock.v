@@ -1,10 +1,10 @@
 /*
-Settings 设置时钟和分钟
-Settings.v by ZelongXiao
+MainClock 设置时钟和分钟
+MainClock.v by ZelongXiao
 2026.06.06
 */
 
-module Settings(clk100, rst, minAdd, hourAdd, state, s, m, h);
+module MainClock(clk100, rst, minAdd, hourAdd, state, s, m, h);
 input clk100, rst, minAdd, hourAdd;
 input [1:0] state;
 output reg [5:0] s, m, h;
