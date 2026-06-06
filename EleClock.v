@@ -28,9 +28,9 @@ wire [1:0] state;
 
 div Div(clk, rst, clk1k, clk100, clk1);
 
-ModeSel ModeSel1(clk1, rst, mode, add, MinAdd, HourAdd, state);
+ModeSel ModeSel1(clk100, rst, mode, add, MinAdd, HourAdd, state);
 
-Settings Settings1(clk1, rst, MinAdd, HourAdd, state, s, m, h);
+Settings Settings1(clk100, rst, MinAdd, HourAdd, state, s, m, h);
 
 // always @(posedge clk1 or negedge rst) begin
 //     if (!rst) begin 
