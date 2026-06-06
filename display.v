@@ -1,5 +1,6 @@
 /*
 Display module 输入6个4位二进制数（0到9），输出数码管显示
+        使用1kHz刷新，DP闪烁频率0.5Hz
 display.v by ZelongXiao
 2026.06.06
 */
@@ -11,22 +12,22 @@ output reg [7:0] seg;
     always @(*) begin
         case(D)
             // 映射 {DP, G, F, E, D, C, B, A} = {7, 6, 5, 4, 3, 2, 1, 0}
-            4'd0:  seg=8'b11000000;
-            4'd1:  seg=8'b11111001;
-            4'd2:  seg=8'b10100100;
-            4'd3:  seg=8'b10110000;
-            4'd4:  seg=8'b10011001;
-            4'd5:  seg=8'b10010010;
-            4'd6:  seg=8'b10000010;
-            4'd7:  seg=8'b11111000; 
-            4'd8:  seg=8'b10000000;
-            4'd9:  seg=8'b10010000;
-            4'd10: seg=8'b10001000;
-            4'd11: seg=8'b10000011;
-            4'd12: seg=8'b11000110;
-            4'd13: seg=8'b10100001;
-            4'd14: seg=8'b10000110;
-            4'd15: seg=8'b10001110; 
+            0:  seg=8'b11000000;
+            1:  seg=8'b11111001;
+            2:  seg=8'b10100100;
+            3:  seg=8'b10110000;
+            4:  seg=8'b10011001;
+            5:  seg=8'b10010010;
+            6:  seg=8'b10000010;
+            7:  seg=8'b11111000; 
+            8:  seg=8'b10000000;
+            9:  seg=8'b10010000;
+            10: seg=8'b10001000;
+            11: seg=8'b10000011;
+            12: seg=8'b11000110;
+            13: seg=8'b10100001;
+            14: seg=8'b10000110;
+            15: seg=8'b10001110; 
         endcase
     end
 endmodule
@@ -46,17 +47,17 @@ module display(rst, clk1k, D0, D1, D2, D3, D4, D5, sel, seg);
     always @(posedge clk1k or negedge rst) begin
         if (!rst) begin
             active<=6'b100000;
-            cnt500<=9'd0;
-            dp<=1'b1;
+            cnt500<=0;
+            dp<=1;
         end
         else begin
             active<={active[0], active[5:1]};
-            if (cnt500>=9'd499) begin
-                cnt500<=9'd0;
+            if (cnt500>=499) begin
+                cnt500<=0;
                 dp<=~dp;
             end
             else
-                cnt500 <= cnt500 + 1'b1;
+                cnt500<=cnt500+1;
         end
     end
 
@@ -68,7 +69,7 @@ module display(rst, clk1k, D0, D1, D2, D3, D4, D5, sel, seg);
             6'b000100: Dsel=D3;
             6'b000010: Dsel=D4;
             6'b000001: Dsel=D5;
-            default: Dsel=4'b0;
+            default: Dsel=0;
         endcase
     end
 

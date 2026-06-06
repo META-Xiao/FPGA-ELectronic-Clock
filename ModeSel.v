@@ -12,8 +12,8 @@ ModeSel.v by ZelongXiao
 2026.06.06
 */
 
-module ModeSel(clk, rst, mode, add, MinAdd, HourAdd, state);
-input clk, rst, mode, add;
+module ModeSel(clk100, rst, mode, add, MinAdd, HourAdd, state);
+input clk100, rst, mode, add;
 output reg MinAdd, HourAdd;
 output reg [1:0] state;
 
@@ -21,37 +21,37 @@ output reg [1:0] state;
     reg [15:0] modeHoldCnt;
     reg [15:0] idleCnt;
     
-    wire mode_i = ~mode;
-    wire add_i  = ~add;
+    wire modeIn=~mode;
+    wire addIn=~add;
 
-    wire modePulse = mode_i & ~modeLa;
-    wire addPulse  = add_i  & ~addLa;
+    wire modePulse = modeIn & ~modeLa;
+    wire addPulse  = addIn  & ~addLa;
     wire modeLong  = (modeHoldCnt >= 16'd200);
 
     // 边沿检测
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk100 or negedge rst) begin
         if (!rst) begin
             modeLa<=0;
             addLa<=0;
         end
         else begin
-            modeLa<=mode_i;
-            addLa <=add_i;
+            modeLa<=modeIn;
+            addLa <=addIn;
         end
     end
 
     // 长按检测
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk100 or negedge rst) begin
         if (!rst)
             modeHoldCnt<=16'd0;
-        else if (!mode_i || state==2'd0)
+        else if (!modeIn || state==2'd0)
             modeHoldCnt <= 16'd0;
         else if (modeHoldCnt < 16'd65535)
             modeHoldCnt <= modeHoldCnt + 16'd1;
     end
 
     // 状态机
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk100 or negedge rst) begin
         if (!rst) begin
             state  <=2'd0;
             idleCnt <= 16'd0;
@@ -79,7 +79,7 @@ output reg [1:0] state;
     end
 
     // 输出
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk100 or negedge rst) begin
         if (!rst) begin
             MinAdd  <= 1'b0;
             HourAdd <= 1'b0;
@@ -90,8 +90,8 @@ output reg [1:0] state;
 
             if (addPulse) begin
                 case (state)
-                    2'd1: MinAdd  <= 1;
-                    2'd2: HourAdd <= 1;
+                    2'd1: MinAdd<=1;
+                    2'd2: HourAdd<=1;
                     default: ;
                 endcase
             end
