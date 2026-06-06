@@ -72,4 +72,8 @@ set_location_assignment PIN_M10 -to sel[2]
 set_location_assignment PIN_P9 -to sel[1]
 set_location_assignment PIN_N9 -to sel[0]
 set_location_assignment PIN_R16 -to seg[7]
+set_global_assignment -name VERILOG_FILE ModeSel.v
+set_global_assignment -name VERILOG_FILE Settings.v
+set_location_assignment PIN_M16 -to add
+set_location_assignment PIN_M15 -to mode
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

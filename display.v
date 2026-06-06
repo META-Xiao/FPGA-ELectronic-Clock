@@ -5,8 +5,8 @@ display.v by ZelongXiao
 */
 
 module ToSeg(D, seg);
-    input [3:0] D;
-    output reg [7:0] seg;
+input [3:0] D;
+output reg [7:0] seg;
 
     always @(*) begin
         case(D)
