@@ -1,6 +1,6 @@
 /*
 Display module 输入6个4位二进制数（0到9），输出数码管显示
-        使用1kHz刷新，DP闪烁频率0.5Hz
+        使用1kHz刷新，DP闪烁时间间隔250ms
 display.v by ZelongXiao
 2026.06.06
 */
@@ -53,7 +53,7 @@ module display(rst, clk1k, state, D0, D1, D2, D3, D4, D5, sel, seg);
         end
         else begin
             active<={active[0], active[5:1]};
-            if (cnt500>=499) begin
+            if (cnt500>=249) begin
                 cnt500<=0;
                 dp<=~dp;
             end
