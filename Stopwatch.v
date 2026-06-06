@@ -7,16 +7,17 @@ Stopwatch.v by ZelongXiao
 2026.06.06
 */
 
-module Stopwatch(clk100, rst, key1, key2, ms, s, m);
+module Stopwatch(clk100, rst, State, key1, key2, ms, s, m);
 input clk100, rst, key1, key2;
+input [2:0] State;
 output reg [6:0] ms;
 output reg [5:0] s, m;
 
     reg key1La, key2La;
     wire key1In=~key1;
     wire key2In=~key2;
-    wire key1Pulse=key1In&~key1La;
-    wire key2Pulse=key2In&~key2La;
+    wire key1Pulse=key1In&~key1La&(State==3);
+    wire key2Pulse=key2In&~key2La&(State==3);
     reg state;
 
     always @(posedge clk100 or negedge rst) begin

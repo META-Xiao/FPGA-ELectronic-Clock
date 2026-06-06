@@ -36,7 +36,7 @@ ModeSel ModeSel1(clk100, rst, mode, key1, key2, MinAdd, HourAdd, MinSub, HourSub
 
 MainClock MC(clk100, rst, MinAdd, HourAdd, MinSub, HourSub, state, s, m, h);
 
-Stopwatch Spt(clk100, rst, key1, key2, ms, ss, mm);
+Stopwatch Spt(clk100, rst, state, key1, key2, ms, ss, mm);
 
 Buzzer Bz(clk1k, rst, s, m, buzzer);
 
