@@ -7,14 +7,14 @@ EleClock by ZelongXiao
 module DivNum(in, out1, out2);
 input [5:0] in;
 output [3:0] out1, out2;
-    assign out1 = in / 10;
-    assign out2 = in % 10;
+    assign out=in/10;
+    assign out2=in%10;
 endmodule 
 
 module EleClock(clk, rst, sel, seg);
 input clk, rst;
 output [5:0] sel;
-output [6:0] seg;
+output [7:0] seg;
 wire clk1k, clk100, clk1;
 reg [5:0] s, m, h;
 wire [3:0] sec1, sec2, min1, min2, hour1, hour2;
