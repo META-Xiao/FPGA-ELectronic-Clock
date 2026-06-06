@@ -5,9 +5,11 @@ ModeSel 选择模式输出 MinAdd、HourAdd 和 [1:0] state
         S=1:设置模式，分钟设置
         S=2:设置模式，小时设置
         S=3:跑表/计时模式
-        0->1->2->3->0 循环切换，按下mode 4次为周期
-            在S={1,2,3}下 长按mode回到S=0
-            在S={1,2}下 10s内不操作回到S=0
+        S=4:闹钟设置模式，分钟设置
+        S=5:闹钟设置模式，小时设置
+        0->1->2->3->4->5->0 循环切换，按下mode 6次为周期
+            在S={1,2,3,4,5}下 长按mode回到S=0
+            在S={1,2,4,5}下 10s内不操作回到S=0
 ModeSel.v by ZelongXiao
 2026.06.06
 */
@@ -15,7 +17,7 @@ ModeSel.v by ZelongXiao
 module ModeSel(clk100, rst, mode, add, Sub, MinAdd, HourAdd, MinSub, HourSub, state);
 input clk100, rst, mode, add, Sub;
 output reg MinAdd, HourAdd, MinSub, HourSub;
-output reg [1:0] state;
+output reg [2:0] state;
 
     reg modeLa, addLa, SubLa;
     reg [15:0] modeHoldCnt;
@@ -62,7 +64,7 @@ output reg [1:0] state;
         else begin
             if (modePulse || addPulse || SubPulse)
                 idleCnt<=0;
-            else if (state==1 || state==2) begin
+            else if (state==1 || state==2 || state==4 || state==5) begin
                 if(idleCnt<2000) idleCnt<=idleCnt+1;
             end
             else idleCnt<=0;
@@ -73,7 +75,7 @@ output reg [1:0] state;
             else if(modePulse) begin
                 state<=(state==3)? 0: state+1;
             end
-            else if ((state==1 || state==2) && idleCnt >= 2000) begin
+            else if ((state==1 || state==2 || state==4 || state==5) && idleCnt >= 2000) begin
                 state<=0;
             end
         end
